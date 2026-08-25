@@ -20,11 +20,13 @@ public class RabbitMQConfig {
     }
 
     //Retiramos o bean que já tem no temperature-processing, deixamos o método como referencia
-    // a essa exchange pra conseguir realizar a configuração do binding
+    // a essa exchange pra conseguir realizar a configuração do binding, caso tivesse o @Bean o serviço que consome os dados tentaria criar a exchange...
+    //Uma exchange (ponto de troca) no RabbitMQ é um componente que recebe as mensagens enviadas pelos produtores (publishers) e decide para qual fila (queue) elas devem ser encaminhadas
     public FanoutExchange exchange() {
-        return ExchangeBuilder.fanoutExchange("temperature-processing.tempertura-received.v1.e").build();
+        return ExchangeBuilder.fanoutExchange("temperature-processing.temperature-received.v1.e").build();
     }
 
+    //Aqui deixamos o @Bean pois o consumidor irá criar o Binding...
     @Bean
     public Binding binding() {
         return BindingBuilder.bind(queue()).to(exchange());

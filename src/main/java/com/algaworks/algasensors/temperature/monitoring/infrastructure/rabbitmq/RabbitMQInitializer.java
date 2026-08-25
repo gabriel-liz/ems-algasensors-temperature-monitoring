@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 public class RabbitMQInitializer {
+//Precisamos do Initializar para que seja criado a fila e o binding....
 
     private final RabbitAdmin rabbitAdmin;
 
