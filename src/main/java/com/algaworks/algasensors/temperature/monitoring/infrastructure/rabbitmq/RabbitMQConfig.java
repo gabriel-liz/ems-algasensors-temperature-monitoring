@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String QUEUE = "temperature-monitoring.process-temperature.v1.q";
+    public static final String QUEUE_PROCESS_TEMPERATURE = "temperature-monitoring.process-temperature.v1.q";
+
+    public static final String QUEUE_ALERTING = "temperature-monitoring.alerting.v1.q";
 
     //Esse método é para desserealizar o json dentro do objeto, irá transformar no objeto TemperatureLogData, caso contrario deria erro de desserialização
     @Bean
@@ -25,8 +27,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue queue() {
-        return QueueBuilder.durable(QUEUE).build();
+    public Queue queueProcessTemperature() {
+        return QueueBuilder.durable(QUEUE_PROCESS_TEMPERATURE).build();
+    }
+
+    @Bean
+    public Queue queueAlerting() {
+        return QueueBuilder.durable(QUEUE_ALERTING).build();
     }
 
     //Retiramos o bean que já tem no temperature-processing, deixamos o método como referencia
@@ -38,8 +45,13 @@ public class RabbitMQConfig {
 
     //Aqui deixamos o @Bean pois o consumidor irá criar o Binding...
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue()).to(exchange());
+    public Binding bindingProcessTemperature() {
+        return BindingBuilder.bind(queueProcessTemperature()).to(exchange());
+    }
+
+    @Bean
+    public Binding bindingAlerting() {
+        return BindingBuilder.bind(queueAlerting()).to(exchange());
     }
 
 }
